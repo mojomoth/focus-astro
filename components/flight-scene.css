@@ -1,0 +1,293 @@
+.flight-scene {
+  --flight-ease: cubic-bezier(.23,.72,.18,1);
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+  pointer-events: none;
+  container-type: size;
+  background: #040911;
+}
+
+.flight-home-bg,
+.flight-takeoff-bg,
+.flight-voyage-bg,
+.flight-vignette,
+.flight-dust,
+.flight-exhaust {
+  position: absolute;
+  inset: 0;
+}
+
+.flight-home-bg,
+.flight-takeoff-bg,
+.flight-voyage-bg {
+  transition: opacity .85s var(--flight-ease), transform 1.35s var(--flight-ease);
+}
+
+.flight-home-bg {
+  background: #071220 url("/scene/takeoff-sky.webp") center / cover no-repeat;
+  filter: saturate(.82);
+  opacity: 0;
+  transform: translateY(23%) scale(.88);
+}
+
+.flight-home-bg[data-earth="true"] {
+  background-image: url("/scene/earth-night.webp");
+  background-position: center 38%;
+}
+
+.flight-home-horizon {
+  position: absolute;
+  top: 29%;
+  left: 50%;
+  width: max(188cqw, 104cqh);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  translate: -50% 0;
+  background-size: cover;
+  box-shadow: 0 0 0 1px #a3bded38, 0 -5px 23px #8eafea2b;
+  filter: brightness(.76);
+}
+
+.flight-home-destination {
+  position: absolute;
+  top: 25%;
+  right: 14%;
+  width: clamp(64px, 27cqw, 112px);
+  height: auto;
+  border-radius: 50%;
+  filter: brightness(.82);
+}
+
+.flight-scene[data-phase="idle"] .flight-home-bg {
+  opacity: 1;
+  transform: none;
+}
+
+.flight-takeoff-bg {
+  background:
+    radial-gradient(ellipse at 50% 37%, #45658a52, transparent 47%),
+    #0a101d url("/scene/takeoff-sky.webp") center top / cover no-repeat;
+  filter: brightness(1.35) saturate(.84);
+  opacity: 0;
+  transform: scale(1.12);
+}
+
+.flight-scene[data-phase="takeoff"] .flight-takeoff-bg {
+  opacity: 1;
+  transform: none;
+}
+
+.flight-voyage-bg {
+  background: #040911;
+  opacity: 0;
+  transform: scale(1.11);
+}
+
+.flight-scene:is([data-phase="focus"], [data-phase="rest"], [data-phase="arrived"]) .flight-voyage-bg {
+  opacity: 1;
+  transform: none;
+}
+
+.flight-nebula-primary,
+.flight-nebula-secondary {
+  position: absolute;
+  inset: -3%;
+  background: center / cover no-repeat;
+  filter: brightness(.78) saturate(.88);
+}
+
+.flight-nebula-primary {
+  background-image: url("/scene/flight-nebula.webp");
+}
+
+.flight-nebula-secondary {
+  opacity: 0;
+}
+
+.flight-vignette {
+  background:
+    linear-gradient(180deg, #03081572 1%, #03081513 36%, #03081508 48%, #050a12c4 84%, #050a12 100%),
+    radial-gradient(ellipse at 50% 43%, transparent 32%, #01040a60 100%);
+}
+
+.flight-dust,
+.flight-exhaust {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity .85s var(--flight-ease);
+}
+
+.flight-scene:is([data-phase="focus"], [data-phase="rest"], [data-phase="arrived"]) :is(.flight-dust, .flight-exhaust) {
+  opacity: 1;
+}
+
+.flight-front-frame,
+.flight-side-frame {
+  position: absolute;
+  top: 43%;
+  left: 50%;
+  translate: -50% -50%;
+}
+
+.flight-front-frame {
+  top: 46%;
+  width: clamp(78px, min(28cqw, 20cqh), 128px);
+  transform: scale(1) rotate(0);
+  opacity: 1;
+  transition:
+    top .92s var(--flight-ease),
+    left .8s var(--flight-ease),
+    transform .9s var(--flight-ease),
+    opacity .52s ease;
+}
+
+.flight-scene[data-phase="takeoff"] .flight-front-frame {
+  top: 33%;
+  transform: scale(.35) rotate(54deg);
+}
+
+.flight-scene:is([data-phase="focus"], [data-phase="rest"], [data-phase="arrived"]) .flight-front-frame {
+  top: 43%;
+  left: 55%;
+  transform: scale(.42) rotate(90deg);
+  opacity: 0;
+}
+
+.flight-front-bob {
+  position: relative;
+  animation: flight-idle-bob 5.6s ease-in-out infinite;
+}
+
+.flight-front-art,
+.flight-side-art {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.flight-front-art {
+  position: relative;
+  filter: drop-shadow(0 12px 17px #0009);
+  animation: flight-idle-sway 8.4s ease-in-out infinite;
+}
+
+.flight-front-glow {
+  position: absolute;
+  left: 50%;
+  top: 98%;
+  width: 68%;
+  aspect-ratio: 1.5;
+  translate: -50% -50%;
+  background: radial-gradient(ellipse, #c4faffc4 2%, #4bd4ff8c 24%, #3b89ff38 46%, transparent 72%);
+  filter: blur(4px);
+  animation: flight-idle-glow 5.6s ease-in-out infinite;
+}
+
+.flight-side-frame {
+  top: 43%;
+  left: 55%;
+  width: clamp(72px, min(27cqw, 27cqh), 148px);
+  opacity: 0;
+  transform: translate(-22%, -100%) scale(.3) rotate(-23deg);
+  transition: opacity .6s ease, transform .95s var(--flight-ease);
+}
+
+.flight-scene:is([data-phase="focus"], [data-phase="rest"], [data-phase="arrived"]) .flight-side-frame {
+  opacity: 1;
+  transform: none;
+}
+
+.flight-side-art {
+  transform: translateY(var(--flight-bob, 0)) rotate(var(--flight-sway, 0deg));
+  filter: drop-shadow(0 9px 16px #0009);
+}
+
+.flight-ship-ahead,
+.flight-ship-passing {
+  position: absolute;
+  width: clamp(22px, 8cqw, 44px);
+  height: auto;
+  filter: brightness(.64) saturate(.55) drop-shadow(-3px 0 4px #77bcfa80);
+}
+
+.flight-ship-ahead {
+  right: 13%;
+  top: 30%;
+  opacity: .66;
+}
+
+.flight-ship-ahead + .flight-ship-ahead {
+  right: 14%;
+  top: 54%;
+  scale: .74;
+  opacity: .49;
+}
+
+.flight-ship-passing {
+  left: 0;
+  top: 31%;
+  opacity: 0;
+  animation: flight-pass 2.8s cubic-bezier(.45,.13,.31,.94) both;
+}
+
+.flight-ship-passing[data-lane="0"] {
+  top: 54%;
+  animation-duration: 3.1s;
+}
+
+.flight-ship-passing[data-delay="1"] {
+  animation-delay: .15s;
+}
+
+.flight-ship-passing[data-delay="2"] {
+  animation-delay: .3s;
+}
+
+.flight-scene:not([data-phase="focus"]) .flight-ship-passing {
+  animation-play-state: paused;
+}
+
+.flight-credit {
+  position: absolute;
+  right: 12px;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 3px);
+  left: 12px;
+  color: #d8e5f9b3;
+  text-align: center;
+  font: 9px / 1.15 system-ui, sans-serif;
+}
+
+@keyframes flight-idle-bob {
+  0%, 100% { transform: translateY(6px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes flight-idle-sway {
+  0%, 100% { transform: rotate(-1.4deg); }
+  50% { transform: rotate(1.4deg); }
+}
+
+@keyframes flight-idle-glow {
+  0%, 100% { opacity: .55; scale: .88; }
+  50% { opacity: 1; scale: 1.1; }
+}
+
+@keyframes flight-pass {
+  0% { transform: translateX(100cqw) scale(.65); opacity: 0; }
+  14% { opacity: .75; }
+  58% { opacity: .9; }
+  100% { transform: translateX(-12cqw) scale(1.22); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flight-scene *,
+  .flight-scene *::before,
+  .flight-scene *::after {
+    animation: none;
+    transition: none;
+  }
+}

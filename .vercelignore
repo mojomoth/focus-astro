@@ -1,0 +1,13 @@
+.env*
+aseets/
+.focus-astro/
+docs/screens/
+docs/design/refs/
+pocs/clone/
+pocs/idle/
+pocs/mockup/
+pocs/setup-ui/
+pocs/ui-v4/
+pocs/voyage/
+pocs/voyage-time/assets/
+pocs/voyage-time/verify/

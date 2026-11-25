@@ -1,0 +1,29 @@
+{
+  "name": "focus-astro",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "check": "tsc --noEmit"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "@vercel/blob": "2.9.0",
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.4",
+    "@types/react": "^19.3.3",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^7.0.2"
+  },
+  "overrides": {
+    "zod": "4.6.7"
+  }
+}

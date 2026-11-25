@@ -1,0 +1,399 @@
+:root {
+  color-scheme: dark;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+  color: #f4f7ff;
+  background: #080a10;
+  -webkit-font-smoothing: antialiased;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; }
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+button:disabled { cursor: default; background: #242f40; color: #a4b1c3; border-color: #77879c55; box-shadow: none; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid #a9e1ff; outline-offset: 4px; }
+p, h1, ul { margin: 0; }
+h1 { text-wrap: balance; }
+svg { flex-shrink: 0; }
+
+.astro-stage {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  background: radial-gradient(ellipse at 50% 47%, #1b2d47 0%, #101724 37%, #080a10 76%);
+}
+
+.astro-device {
+  position: relative;
+  width: min(440px, calc((100dvh - 42px) * 851 / 1848));
+  aspect-ratio: 851 / 1848;
+  filter: drop-shadow(0 25px 48px #0008);
+}
+
+.astro-frame {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  background: url("/assets/mockup-iphone.png") center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+
+.astro-screen {
+  --safe-top: 45px;
+  --safe-bottom: 22px;
+  --side-left: 21px;
+  --side-right: 21px;
+  --glass: #111a2bd9;
+  --glass-border: #c1daff35;
+  --muted: #bac7db;
+  --accent: #a2dcff;
+  position: absolute;
+  inset: 1.84% 4.11% 1.73% 4.23%;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 13.6% / 6%;
+  container-type: size;
+  background: #060d18;
+  color: #f5f8ff;
+  word-break: keep-all;
+}
+
+.astro-chrome {
+  position: absolute;
+  z-index: 3;
+  inset: 0 8% auto 11%;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+  font-size: 12px;
+  font-weight: 750;
+  text-shadow: 0 1px 8px #0009;
+}
+
+.astro-panel {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  padding: max(16px, var(--safe-top)) var(--side-right) 0 var(--side-left);
+}
+
+.home-header, .flight-header { text-shadow: 0 2px 18px #02060de6, 0 1px 5px #0013; }
+.home-top, .flight-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.wordmark { font-size: clamp(14px, 4.9cqw, 21px); font-weight: 850; letter-spacing: .045em; }
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 29px;
+  padding: 4px 9px;
+  border: 1px solid var(--glass-border);
+  border-radius: 30px;
+  background: #0b1323ba;
+  color: #ecf3ff;
+  font-size: 11px;
+  line-height: 1.15;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.status-chip svg { width: 14px; height: 14px; }
+.location-label { display: flex; align-items: center; gap: 5px; color: #c4d6e9; font-size: 13px; font-weight: 650; }
+.location-label svg { width: 14px; height: 14px; }
+.home-header .location-label { margin-top: clamp(9px, 2.5cqh, 22px); }
+.home-header h1, .collection-panel h1 {
+  margin-top: 4px;
+  font-size: clamp(36px, 11.8cqw, 53px);
+  line-height: 1.06;
+  letter-spacing: -.055em;
+}
+
+.return-notice {
+  position: absolute;
+  inset: auto var(--side-right) calc(var(--safe-bottom) + 91px) var(--side-left);
+  padding: 11px 14px;
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  background: #111c2bee;
+  color: #edf6ff;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.home-dock {
+  position: absolute;
+  z-index: 2;
+  inset: auto var(--side-right) max(22px, calc(var(--safe-bottom) + 13px)) var(--side-left);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.home-dock nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 5px;
+  border: 1px solid var(--glass-border);
+  border-radius: 40px;
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+}
+.home-dock nav button, .icon-button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+}
+.home-dock nav button[aria-current="page"] { color: #f5f8ff; background: #334761; }
+.home-dock nav button:hover { color: #f5f8ff; }
+.takeoff-button, .primary-button {
+  color: #0a1321;
+  background: linear-gradient(155deg, #f5f8ff, #d9e8f9 85%);
+  border: 1px solid #f5f8ff;
+  box-shadow: 0 8px 30px #86c2fa28, inset 0 -2px 0 #0a233227;
+  font-weight: 780;
+}
+.takeoff-button {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 3px;
+  width: clamp(59px, 16cqw, 72px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  font-size: 13px;
+}
+.takeoff-button svg { width: 23px; height: 23px; }
+.primary-button {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border-radius: 35px;
+  font-size: 16px;
+}
+.primary-button:hover:not(:disabled), .takeoff-button:hover:not(:disabled) { background: #f5f8ff; }
+button:active:not(:disabled) { scale: .97; }
+
+.takeoff-panel { display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; }
+.takeoff-header, .takeoff-controls { pointer-events: auto; }
+.takeoff-header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; }
+.takeoff-header h1 { font-size: 17px; }
+.takeoff-header .status-chip { justify-self: end; }
+.icon-button {
+  border: 1px solid var(--glass-border);
+  background: #101b2bc9;
+  color: #edf5ff;
+}
+.signal { flex: 0 0 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+
+.takeoff-controls { padding-bottom: max(23px, calc(var(--safe-bottom) + 8px)); }
+.ruler { margin-bottom: 7px; }
+.ruler-value { text-align: center; font-size: 13px; font-weight: 750; font-variant-numeric: tabular-nums; }
+.range-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 9px; }
+.range-row .icon-button { width: 44px; height: 44px; }
+.range-row input {
+  display: block;
+  width: 100%;
+  height: 42px;
+  margin: 0;
+  appearance: none;
+  border: 0;
+  cursor: ew-resize;
+  background:
+    linear-gradient(#91b5db80, #91b5db80) center / 100% 1px no-repeat,
+    repeating-linear-gradient(90deg, #91b5db85 0 1px, transparent 1px 10%) center / 100% 13px no-repeat;
+}
+.range-row input::-webkit-slider-thumb {
+  appearance: none;
+  width: 17px;
+  height: 21px;
+  border: 3px solid #071323;
+  border-radius: 7px;
+  background: #ecf8ff;
+  box-shadow: 0 0 0 1px #94c5ef, 0 0 16px #86c9fa88;
+}
+.range-row input::-moz-range-thumb {
+  width: 12px;
+  height: 16px;
+  border: 3px solid #071323;
+  border-radius: 7px;
+  background: #ecf8ff;
+  box-shadow: 0 0 0 1px #94c5ef, 0 0 16px #86c9fa88;
+}
+
+.destination-window {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, clamp(113px, 39cqw, 155px)));
+  justify-content: center;
+  gap: 8px;
+  width: calc(100% + var(--side-left) + var(--side-right));
+  margin: 0 calc(-1 * var(--side-right)) 13px calc(-1 * var(--side-left));
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+}
+.destination-card {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  min-height: 158px;
+  padding: 10px 11px 8px;
+  border: 1px solid #8ba8c253;
+  border-radius: 17px;
+  background: linear-gradient(155deg, #213146f4, #0b1423f5);
+  text-align: left;
+}
+.destination-card[aria-pressed="true"] { background: linear-gradient(150deg, #f3f8ff, #c7d6e9); border-color: #f5f8ff; color: #111924; }
+.planet-orb {
+  display: grid;
+  place-items: center;
+  width: 45px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #15243a center / cover;
+  box-shadow: 0 2px 10px #03070466;
+}
+.planet-waypoint { color: #b2daf9; border: 1px dashed #9ac9ee96; }
+.destination-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; font-size: 15px; }
+.destination-detail { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 10px; opacity: .75; }
+.destination-data { display: grid; gap: 4px; padding-top: 6px; margin-top: 4px; border-top: 1px solid #8498ae5e; }
+.destination-data > span { display: flex; gap: 3px; justify-content: space-between; font-size: 10px; }
+.destination-data > span > span { opacity: .78; }
+.destination-data strong { text-align: right; font-size: 11px; }
+
+.flight-panel { --accent: #97deff; display: flex; flex-direction: column; justify-content: space-between; }
+.astro-screen[data-phase="rest"] .flight-panel { --accent: #ffcf9a; }
+.flight-header h1 { margin-top: 10px; color: #e6eefb; line-height: 1.25; font-size: clamp(15px, 4.4cqw, 18px); font-weight: 725; letter-spacing: -.02em; }
+.flight-mode {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 730;
+}
+.timer {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(49px, 18.5cqw, 82px);
+  letter-spacing: -.07em;
+  line-height: .99;
+}
+.phase-detail { margin-top: 8px; font-size: 12px; font-weight: 630; color: #d1e0f2; }
+.flight-footer { padding-bottom: max(24px, calc(var(--safe-bottom) + 10px)); }
+.flight-progress, .arrival-card {
+  padding: 13px 14px 12px;
+  border: 1px solid #86b8ef66;
+  background: linear-gradient(155deg, #1b304bd9, #0e182af0);
+  border-radius: 18px;
+  backdrop-filter: blur(16px);
+}
+.route-labels { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; font-weight: 740; }
+.route-labels span:last-child { text-align: right; }
+.flight-progress progress {
+  display: block;
+  width: 100%;
+  height: 5px;
+  margin: 10px 0 7px;
+  appearance: none;
+  border: 0;
+  border-radius: 4px;
+  background: #7593bb47;
+  overflow: hidden;
+}
+.flight-progress progress::-webkit-progress-bar { background: #7593bb47; border-radius: 4px; }
+.flight-progress progress::-webkit-progress-value { background: var(--accent); border-radius: 4px; }
+.flight-progress progress::-moz-progress-bar { background: var(--accent); border-radius: 4px; }
+.flight-progress p { text-align: center; color: #dbe8f6; font-size: 11px; font-variant-numeric: tabular-nums; }
+.flight-progress p span, .arrival-card > p > span { color: #9eb7d3; padding: 0 2px; }
+.flight-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 9px; }
+.flight-actions p { font-size: 11px; color: #bdcce1; line-height: 1.45; }
+.flight-actions button { flex: 0 0 44px; }
+
+.arrival-panel { display: grid; place-items: center; padding-bottom: var(--safe-bottom); }
+.arrival-card { width: 100%; display: grid; gap: 12px; justify-items: center; padding: 22px 18px 18px; text-align: center; }
+.arrival-card .planet-orb { width: 70px; }
+.arrival-card h1 { font-size: 27px; letter-spacing: -.04em; line-height: 1.1; overflow-wrap: anywhere; }
+.arrival-card > p:last-of-type { font-size: 13px; color: var(--muted); }
+.arrival-card .primary-button { margin-top: 5px; }
+
+.collection-panel {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(var(--safe-bottom) + 88px);
+  background: linear-gradient(180deg, #070f1ce6, #0b1423fd 32%, #0a1320f7);
+}
+.collection-panel h1 { margin-bottom: 15px; font-size: clamp(32px, 10cqw, 42px); }
+.collection-scroll { min-height: 0; overflow: auto; overscroll-behavior: contain; }
+.collection-list { display: grid; gap: 6px; list-style: none; padding: 0; }
+.collection-list li > button, .record-row, .collection-empty {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 11px;
+  text-align: left;
+  min-height: 61px;
+  padding: 9px 10px;
+  border: 1px solid #829dba3b;
+  border-radius: 13px;
+  background: #172538;
+}
+.collection-list li > button:hover { background: #23354c; }
+.collection-name { min-width: 0; display: grid; gap: 3px; flex: 1; }
+.collection-name strong { line-height: 1.25; font-size: 14px; overflow-wrap: anywhere; }
+.collection-name small, .collection-meta, .collection-empty { font-size: 12px; color: var(--muted); }
+.collection-meta { text-align: right; }
+.collection-list .planet-orb { width: 33px; flex: none; }
+.asset-credits { display: inline-block; padding: 13px 4px; color: var(--muted); font-size: 12px; text-underline-offset: 3px; }
+
+@media (max-width: 680px), (pointer: coarse) and (hover: none) {
+  .astro-stage { display: block; }
+  .astro-device { width: 100%; height: 100dvh; aspect-ratio: auto; filter: none; }
+  .astro-frame, .astro-chrome { display: none; }
+  .astro-screen {
+    --safe-top: calc(env(safe-area-inset-top, 0px) + 17px);
+    --safe-bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+    --side-left: max(20px, calc(env(safe-area-inset-left, 0px) + 9px));
+    --side-right: max(20px, calc(env(safe-area-inset-right, 0px) + 9px));
+    inset: 0;
+    border-radius: 0;
+  }
+}
+
+@container (max-height: 590px) {
+  .destination-card { min-height: 137px; }
+  .destination-window { margin-bottom: 8px; }
+  .destination-card .planet-orb { width: 36px; }
+  .takeoff-controls { padding-bottom: max(15px, var(--safe-bottom)); }
+  .flight-footer { padding-bottom: max(17px, var(--safe-bottom)); }
+  .home-dock { bottom: max(17px, var(--safe-bottom)); }
+}
+
+@container (max-height: 450px) {
+  .astro-panel { padding-top: max(7px, calc(var(--safe-top) - 7px)); }
+  .takeoff-panel { display: grid; grid-template-columns: 1fr min(53%, 330px); align-items: start; gap: 10px; }
+  .takeoff-header { display: flex; flex-wrap: wrap; justify-content: flex-start; }
+  .takeoff-controls { align-self: end; }
+  .destination-window { grid-template-columns: repeat(3, 123px); }
+  .destination-card { min-height: 114px; padding-top: 6px; }
+  .destination-card .planet-orb { width: 29px; }
+  .return-notice { bottom: 80px; }
+  .flight-panel { display: grid; grid-template-columns: 1fr min(45%, 300px); gap: 12px; }
+  .flight-footer { align-self: end; }
+  .timer { font-size: min(15cqh, 69px); }
+  .collection-panel h1 { font-size: 30px; margin-bottom: 9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button { scale: 1 !important; }
+}
