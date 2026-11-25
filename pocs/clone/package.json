@@ -1,0 +1,10 @@
+{
+  "name": "focus-astro-ui-clone",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "dev:https": "node scripts/serve.mjs --https",
+    "shots": "node scripts/shots.mjs"
+  }
+}

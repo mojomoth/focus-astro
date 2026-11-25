@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <!-- viewport-fit=cover: 노치/다이내믹 아일랜드/홈 인디케이터 영역까지 그리고 env(safe-area-inset-*)로 피한다 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+  <meta name="theme-color" content="#05070d" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Focus Astro" />
+  <meta name="format-detection" content="telephone=no" />
+  <title>Focus Astro · Mockup PoC</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="assets/rocket.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <script>
+    // 첫 페인트 전에 표시 모드를 결정해 목업이 깜빡이지 않게 한다.
+    // ?frame=1 → 항상 목업, ?frame=0 → 항상 전체 화면
+    (function () {
+      var p = new URLSearchParams(location.search).get('frame');
+      var mobile = matchMedia('(hover: none) and (pointer: coarse)').matches;
+      document.documentElement.dataset.mode = p === '1' ? 'mockup' : p === '0' ? 'full' : mobile ? 'full' : 'mockup';
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="stage">
+    <div class="device" id="device">
+      <!-- 실제 앱 화면: 목업의 투명한 스크린 영역(851×1848 원본 기준 x36 y34 780×1782)에 맞춘다 -->
+      <div class="screen" id="screen">
+        <div class="app" id="app">
+          <!-- 배경 -->
+          <div class="bg" aria-hidden="true">
+            <div class="bg-space"></div>
+            <div class="bg-stars"></div>
+            <div class="bg-earth"><div class="earth-atmo"></div></div>
+          </div>
+
+          <!-- 목업 모드 전용 가상 상태 표시줄 (실기기에서는 OS가 그린다) -->
+          <div class="sim-statusbar" aria-hidden="true">
+            <span class="sb-time" id="sbTime">9:41</span>
+            <span class="sb-icons">
+              <svg viewBox="0 0 18 12" width="18" height="12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+              <svg viewBox="0 0 16 12" width="16" height="12"><circle cx="8" cy="10.3" r="1.5"/><path d="M4.9 7.3a4.4 4.4 0 0 1 6.2 0M2.1 4.5a8.3 8.3 0 0 1 11.8 0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+              <svg viewBox="0 0 27 12" width="27" height="12"><rect x=".5" y=".5" width="23" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="24.6" y="4" width="1.6" height="4" rx=".8" opacity=".4"/></svg>
+            </span>
+          </div>
+
+          <!-- 뷰 -->
+          <section class="view is-active" data-view="home" aria-label="항해">
+            <header class="home-head">
+              <div>
+                <p class="greet" id="greet">좋은 저녁입니다, 항해사님</p>
+                <h1 class="place">지구</h1>
+                <p class="sub">현재 위치 · 누적 항해 <b>0.00</b> 광년</p>
+              </div>
+              <span class="chip"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 15c-1.5 1.3-2 5-2 5s3.7-.5 5-2m4.2-4.6L9.6 10.8M14.5 4.5c2.6-1.3 5-1.3 5-1.3s0 2.4-1.3 5L12 14.4l-4.4-4.4 6.9-5.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>오늘 집중 0분</span>
+            </header>
+            <div class="ship" aria-hidden="true">
+              <img src="assets/rocket.png" alt="" draggable="false" />
+              <span class="ship-glow"></span>
+            </div>
+          </section>
+
+          <section class="view" data-view="check" aria-label="권한 점검">
+            <div class="scroll">
+              <h2 class="title">장치 점검</h2>
+              <p class="lede">카메라·마이크는 사용자 제스처(탭) 뒤에만 요청한다. HTTPS 또는 localhost에서만 동작한다.</p>
+
+              <div class="notice" id="secureNotice" hidden>
+                <b>보안 컨텍스트가 아님</b>
+                <span>현재 주소(<code id="originText"></code>)는 HTTPS가 아니어서 브라우저가 카메라·마이크 API를 막는다. <code>npm run dev:https</code>로 실행하거나 터널(HTTPS)을 사용한다.</span>
+              </div>
+
+              <article class="card" id="camCard">
+                <div class="card-head">
+                  <span class="card-title">카메라</span>
+                  <span class="pill" data-state="unknown" id="camState">확인 중</span>
+                </div>
+                <div class="preview" id="camPreview">
+                  <video id="camVideo" playsinline muted autoplay></video>
+                  <div class="preview-empty" id="camEmpty">
+                    <svg viewBox="0 0 24 24" width="28" height="28"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h2l1.4-2h8.2l1.4 2h2A1.5 1.5 0 0 1 21 7.5v10a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5v-10Z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12.5" r="3.6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+                    <span>미리보기 꺼짐</span>
+                  </div>
+                  <button class="icon-btn flip" id="camFlip" type="button" aria-label="카메라 전환" hidden>
+                    <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 9a8 8 0 0 1 14.3-3M20 15a8 8 0 0 1-14.3 3M18.5 2.5V6H15M5.5 21.5V18H9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                </div>
+                <p class="hint" id="camHint"></p>
+                <button class="btn" id="camBtn" type="button">카메라 켜기</button>
+              </article>
+
+              <article class="card" id="micCard">
+                <div class="card-head">
+                  <span class="card-title">마이크</span>
+                  <span class="pill" data-state="unknown" id="micState">확인 중</span>
+                </div>
+                <div class="meter" id="micMeter" aria-label="입력 레벨">
+                  <!-- JS가 막대를 채운다 -->
+                </div>
+                <p class="hint" id="micHint"></p>
+                <button class="btn" id="micBtn" type="button">마이크 켜기</button>
+              </article>
+            </div>
+          </section>
+
+          <section class="view" data-view="info" aria-label="환경">
+            <div class="scroll">
+              <h2 class="title">표시 환경</h2>
+              <p class="lede">안전 영역과 터치 입력이 제대로 잡히는지 확인한다.</p>
+              <dl class="kv" id="envList"></dl>
+
+              <h3 class="subtitle">멀티터치 테스트</h3>
+              <div class="touchpad" id="touchpad">
+                <span class="touchpad-label" id="touchLabel">여기를 손가락으로 눌러 보세요</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- 하단 내비게이션: 홈 인디케이터(안전 영역) 위에 놓인다 -->
+          <nav class="dock" aria-label="탭">
+            <div class="tabs" role="tablist">
+              <button class="tab is-active" role="tab" aria-selected="true" data-to="home" aria-label="항해">
+                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 3v3M7 6h10l-1.5 4h-7L7 6Zm1.5 4L8 21m7.5-11 .5 11M6 21h12M9 15h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="tab" role="tab" aria-selected="false" data-to="check" aria-label="권한 점검">
+                <svg viewBox="0 0 24 24" width="24" height="24"><rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </button>
+              <button class="tab" role="tab" aria-selected="false" data-to="info" aria-label="환경">
+                <svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4.2 16.8C1.8 19.3 1.4 21.2 2.3 21.9c1.5 1.2 6.4-1.5 11-6s7.2-9.5 6-11c-.7-.9-2.6-.5-5.1 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+            <button class="fab" id="launchBtn" type="button">
+              <img src="assets/rocket.png" alt="" draggable="false" />
+              <span>이륙</span>
+            </button>
+          </nav>
+
+          <!-- 목표 설정 시트: 스와이프로 목적지 선택, 아래로 끌어 닫기 -->
+          <div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
+          <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
+            <div class="sheet-grip" id="sheetGrip"><span></span></div>
+            <h2 class="sheet-title" id="sheetTitle">목적지 설정</h2>
+            <p class="sheet-sub">좌우로 밀어 목표 거리를 고르세요</p>
+            <div class="carousel" id="carousel" tabindex="0" aria-roledescription="carousel">
+              <div class="carousel-track" id="track"></div>
+            </div>
+            <div class="dest-meta">
+              <span id="destDist"></span>
+              <span class="dot">·</span>
+              <span id="destTime"></span>
+            </div>
+            <button class="btn btn-primary" id="departBtn" type="button">출항</button>
+          </section>
+
+          <div class="toast" id="toast" role="status" aria-live="polite"></div>
+          <!-- 홈 인디케이터는 목업 모드에서만 흉내 낸다 -->
+          <div class="sim-home" aria-hidden="true"></div>
+        </div>
+      </div>
+      <!-- 프레임 이미지는 화면 위에 덮고 포인터를 통과시킨다 -->
+      <img class="frame" src="assets/mockup-iphone.png" alt="" aria-hidden="true" draggable="false" />
+    </div>
+    <p class="stage-caption">Focus Astro · 웹앱 목업 PoC <span>모바일에서 열면 전체 화면으로 표시됩니다</span></p>
+  </main>
+  <script src="app.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+:root {
+  --bg: #070a12;
+  --bg2: #0c111d;
+  --card: #0f1523;
+  --card2: #131b2c;
+  --line: #1f2a3f;
+  --line2: #2a3852;
+  --text: #e7ecf5;
+  --muted: #9aa7bd;
+  --dim: #7d8aa3;
+  --accent: #7cd4ff;
+  --accent2: #b39cff;
+  --ok: #5ee0a0;
+  --bad: #ff7a7a;
+  --warn: #ffc46b;
+  --solar: #ffb86b;
+  --edge: #9aa6bc;
+  --near: #7cd4ff;
+  --far: #b39cff;
+  --deep: #ff7ab8;
+  --radius: 14px;
+  --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(124, 212, 255, .07), transparent 60%),
+    radial-gradient(900px 500px at -10% 20%, rgba(179, 156, 255, .06), transparent 60%),
+    var(--bg);
+  color: var(--text);
+  font: 14px/1.5 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+h1, h2, h3 { margin: 0; font-weight: 650; letter-spacing: -.01em; }
+h1 { font-size: 20px; }
+h2 { font-size: 15px; }
+b { font-weight: 650; }
+.muted { color: var(--muted); }
+.small { font-size: 12.5px; }
+.num, .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* 상단 */
+.top {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding: 18px 24px; border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(7, 10, 18, .86); backdrop-filter: blur(10px);
+}
+.brand { display: flex; gap: 14px; align-items: center; min-width: 0; }
+.mark {
+  width: 34px; height: 34px; border-radius: 50%; flex: none;
+  background: radial-gradient(circle at 35% 35%, #bfe9ff, #3a7bd5 55%, #10204a 100%);
+  box-shadow: 0 0 0 4px rgba(124, 212, 255, .08), 0 0 24px rgba(124, 212, 255, .35);
+}
+.sub { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+.top-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn {
+  appearance: none; border: 1px solid var(--line2); background: var(--card2); color: var(--text);
+  padding: 7px 12px; border-radius: 9px; font: inherit; font-size: 13px; cursor: pointer;
+}
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); color: #04121c; border-color: var(--accent); font-weight: 650; }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.frozen-badge { align-self: center; font-size: 12px; color: var(--ok); border: 1px solid rgba(94, 224, 160, .35); border-radius: 999px; padding: 3px 10px; }
+
+/* 기록 다이얼로그 */
+.dlg { width: min(520px, calc(100vw - 32px)); background: var(--card); color: var(--text); border: 1px solid var(--line2); border-radius: 16px; padding: 20px 22px; }
+.dlg::backdrop { background: rgba(2, 4, 10, .65); backdrop-filter: blur(3px); }
+.dlg h2 { font-size: 17px; margin-bottom: 6px; }
+.dlg code { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+.field { display: flex; flex-direction: column; gap: 5px; font-size: 13px; color: var(--muted); margin: 14px 0 0; }
+.field input, .field textarea { background: var(--bg2); border: 1px solid var(--line2); color: var(--text); border-radius: 9px; padding: 8px 10px; font: inherit; font-size: 14px; resize: vertical; }
+.field input { font-family: var(--mono); }
+.field input:invalid:not(:placeholder-shown) { border-color: var(--bad); }
+.field .hint { font-size: 12px; color: var(--dim); }
+.freeze-sum { margin-top: 14px; display: grid; gap: 6px; font-size: 13px; background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.freeze-sum .warn { color: var(--warn); }
+.form-err { color: var(--bad); font-size: 13px; margin: 10px 0 0; }
+.dlg-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+
+/* 기록 목록 */
+.frozen-list { display: grid; gap: 8px; }
+.frozen-row { display: grid; grid-template-columns: 70px 1fr auto; gap: 12px; align-items: center; background: var(--bg2); border: 1px solid var(--line); border-radius: 11px; padding: 10px 12px; }
+.frozen-row.current { border-color: rgba(94, 224, 160, .45); }
+.frozen-row .ver { font: 700 15px var(--mono); color: var(--accent); }
+.frozen-row .meta { font-size: 12.5px; color: var(--muted); min-width: 0; }
+.frozen-row .meta b { color: var(--text); font-weight: 600; }
+.frozen-row .memo { color: var(--text); opacity: .85; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.frozen-empty { font-size: 13px; color: var(--muted); }
+.frozen-empty code { font-family: var(--mono); color: var(--accent); }
+.btn:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* 레이아웃 */
+.layout { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 20px; padding: 20px 24px 60px; max-width: 1680px; margin: 0 auto; }
+.panel {
+  position: sticky; top: 92px; align-self: start; max-height: calc(100vh - 110px); overflow: auto;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 6px 16px 16px;
+  scrollbar-width: thin;
+}
+.panel > summary { display: none; }
+.panel:not([open]) { padding-bottom: 6px; }
+.main { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; min-width: 0; }
+.card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.card > p { margin: 0 0 10px; }
+
+/* 컨트롤 */
+.group { padding: 12px 0 6px; border-bottom: 1px dashed var(--line); }
+.group:last-child { border-bottom: 0; }
+.group h3 { font-size: 12px; color: var(--muted); text-transform: none; font-weight: 600; margin-bottom: 8px; letter-spacing: .02em; }
+.seg { display: grid; grid-template-columns: 1fr; gap: 6px; }
+.seg button {
+  text-align: left; border: 1px solid var(--line2); background: var(--bg2); color: var(--text);
+  border-radius: 10px; padding: 8px 10px; font: inherit; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 8px;
+}
+.seg button .tag { font-size: 11px; color: var(--muted); border: 1px solid var(--line2); border-radius: 999px; padding: 1px 7px; white-space: nowrap; }
+.seg button[aria-pressed='true'] { border-color: var(--accent); background: rgba(124, 212, 255, .08); }
+.seg button[aria-pressed='true'] .tag { color: var(--accent); border-color: rgba(124, 212, 255, .4); }
+.ctl { margin: 10px 0 12px; }
+.ctl-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.ctl label { font-size: 13px; }
+.ctl .val { display: flex; align-items: center; gap: 4px; }
+.ctl input[type='number'] {
+  width: 70px; background: var(--bg2); border: 1px solid var(--line2); color: var(--text);
+  border-radius: 7px; padding: 3px 6px; font: 12.5px var(--mono); text-align: right;
+}
+.ctl .unit { font-size: 12px; color: var(--muted); min-width: 1.5em; }
+.ctl input[type='range'] { width: 100%; accent-color: var(--accent); margin: 6px 0 0; }
+.ctl .hint { font-size: 12px; color: var(--dim); margin-top: 1px; }
+.ctl.changed label::after { content: ' •'; color: var(--warn); }
+.check-ctl { display: flex; gap: 8px; align-items: flex-start; margin: 10px 0; font-size: 13px; cursor: pointer; }
+.check-ctl input { accent-color: var(--accent); margin-top: 3px; }
+
+/* KPI */
+.kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+.kpi { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; min-width: 0; }
+.kpi .k { font-size: 12px; color: var(--muted); }
+.kpi .v { font-size: 20px; font-weight: 700; margin-top: 2px; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kpi .s { font-size: 12px; color: var(--dim); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* 체크 */
+.checks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.chk { border: 1px solid var(--line); border-radius: 11px; padding: 10px 12px; background: var(--bg2); display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; }
+.chk .badge { grid-row: span 3; font: 700 11px var(--mono); border-radius: 6px; padding: 3px 6px; height: fit-content; margin-top: 2px; }
+.chk.ok .badge { color: #062b1a; background: var(--ok); }
+.chk.bad { border-color: rgba(255, 122, 122, .35); }
+.chk.bad .badge { color: #3a0808; background: var(--bad); }
+.chk .l { font-size: 13px; font-weight: 600; }
+.chk .vv { font-size: 12.5px; color: var(--text); opacity: .85; }
+.chk .h { font-size: 12px; color: var(--dim); }
+
+/* 차트 */
+.chart { width: 100%; min-height: 120px; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart text { fill: var(--muted); font: 11px 'Pretendard Variable', Pretendard, system-ui, sans-serif; }
+.chart .axis { stroke: var(--line2); }
+.chart .grid { stroke: var(--line); }
+.chart .thr { stroke: var(--warn); stroke-dasharray: 4 4; }
+.chart .thr2 { stroke: var(--dim); stroke-width: .8; }
+.chart .hit { cursor: default; }
+.chart .hit:hover { opacity: .75; }
+.legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+
+/* 계산기 */
+.calc-row { display: flex; gap: 10px; align-items: end; flex-wrap: wrap; margin-bottom: 12px; }
+.calc-row label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); flex: 1 1 160px; min-width: 0; }
+.calc-row label.num { flex: 0 0 110px; }
+.calc-row .arrow { color: var(--dim); padding-bottom: 8px; }
+select, .calc-row input {
+  background: var(--bg2); border: 1px solid var(--line2); color: var(--text); border-radius: 9px; padding: 7px 8px;
+  font: inherit; font-size: 13px; width: 100%; min-width: 0;
+}
+.calc-out { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.calc-out .cell { background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; min-width: 0; }
+.calc-out .cell .k { font-size: 11.5px; color: var(--muted); }
+.calc-out .cell .v { font-size: 15px; font-weight: 650; margin-top: 1px; overflow-wrap: anywhere; }
+.calc-out .wide { grid-column: 1 / -1; font-size: 13px; }
+.calc-out .wide.ok { border-color: rgba(94, 224, 160, .35); }
+.calc-out .wide.bad { border-color: rgba(255, 122, 122, .4); }
+
+/* 표 */
+.table-wrap { overflow-x: auto; margin: 0 -4px; }
+table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+th, td { padding: 6px 7px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+th { color: var(--muted); font-weight: 600; font-size: 11.5px; position: sticky; top: 0; background: var(--card); }
+td.l, th.l { text-align: left; }
+td.num { font-family: var(--mono); font-size: 12px; }
+.planets tr.wp td { color: var(--muted); font-style: italic; }
+.planets tr.over td { background: rgba(255, 122, 122, .06); }
+.planets .thumb { flex: none; width: 28px; height: 28px; border-radius: 50%; object-fit: cover; display: block; background: var(--bg2); border: 1px solid var(--line2); }
+.planets .thumb.ph { display: grid; place-items: center; color: var(--dim); font-size: 10px; }
+.planets .name { display: flex; align-items: center; gap: 10px; white-space: normal; min-width: 170px; max-width: 230px; }
+.planets .name small { display: block; color: var(--dim); font-size: 11px; }
+.dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+.up { color: var(--accent); font-weight: 700; }
+.pill { font-size: 11px; border-radius: 999px; padding: 1px 8px; border: 1px solid var(--line2); }
+.pill.ok { color: var(--ok); border-color: rgba(94, 224, 160, .35); }
+.pill.bad { color: var(--bad); border-color: rgba(255, 122, 122, .4); }
+.bar-in { display: inline-block; height: 6px; border-radius: 3px; background: var(--accent); vertical-align: middle; margin-left: 6px; opacity: .7; }
+.cmp tbody tr { cursor: pointer; }
+.cmp tbody tr:hover td { background: rgba(124, 212, 255, .04); }
+.cmp tbody tr.active td { background: rgba(124, 212, 255, .08); }
+.cmp td.l b { margin-right: 6px; }
+
+/* 행성 표: 목적지 열 고정 */
+.planets td:nth-child(2), .planets th:nth-child(2) { position: sticky; left: 0; background: var(--card); z-index: 1; }
+.planets th:nth-child(2) { z-index: 2; }
+
+/* 근거 */
+.notes ol { margin: 10px 0 8px; padding-left: 20px; display: grid; gap: 6px; color: #cfd6e3; }
+.notes li b { color: var(--text); }
+
+/* 툴팁·토스트 */
+.tip {
+  position: fixed; z-index: 50; pointer-events: none; max-width: 280px;
+  background: #0b1020; border: 1px solid var(--line2); border-radius: 9px; padding: 8px 10px; font-size: 12px; line-height: 1.45;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .5);
+}
+.tip b { color: var(--accent); }
+.toast {
+  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); opacity: 0;
+  background: var(--card2); border: 1px solid var(--line2); border-radius: 10px; padding: 8px 14px; font-size: 13px;
+  transition: .25s ease; pointer-events: none; z-index: 60;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* 반응형 */
+@media (max-width: 1360px) {
+  .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .checks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 1100px) {
+  .grid2 { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); padding: 16px; }
+  .panel { position: static; max-height: none; }
+  .panel > summary { display: flex; justify-content: space-between; cursor: pointer; padding: 10px 0; font-weight: 650; list-style: none; }
+  .panel > summary::after { content: '열기 ▾'; color: var(--muted); font-weight: 400; font-size: 13px; }
+  .panel[open] > summary::after { content: '닫기 ▴'; }
+  .panel > summary::-webkit-details-marker { display: none; }
+  .top { position: static; padding: 14px 16px; }
+}
+@media (max-width: 560px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .checks { grid-template-columns: minmax(0, 1fr); }
+  .calc-out { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kpi .v { font-size: 17px; }
+  .planets .col-opt { display: none; }
+  .planets .name { min-width: 140px; }
+  .btn { min-height: 40px; }
+  .frozen-row { grid-template-columns: 1fr auto; }
+  .frozen-row .ver { grid-column: 1 / -1; }
+}

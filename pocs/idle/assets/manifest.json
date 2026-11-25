@@ -1,0 +1,114 @@
+{
+  "space": [
+    "assets/space/ancient-cluster-stunning-background-potw1046a.jpg",
+    "assets/space/andromeda-galaxy-hubble-heic1502a.jpg",
+    "assets/space/barnard-68-dark-cloud-eso9924a.jpg",
+    "assets/space/carina-cosmic-cliffs-webb-composite-weic2205b.jpg",
+    "assets/space/carina-cosmic-cliffs-webb-nircam-weic2205a.jpg",
+    "assets/space/carina-nebula-hubble-wfc3-heic0910e.jpg",
+    "assets/space/carina-nebula-infrared-vlt-eso1208a.jpg",
+    "assets/space/carina-nebula-jets-webb.jpg",
+    "assets/space/carina-nebula-panorama-eso1031b.jpg",
+    "assets/space/crab-nebula-webb-weic2417a.jpg",
+    "assets/space/eagle-nebula-eso0926a.jpg",
+    "assets/space/helix-nebula-webb-weic2601a.jpg",
+    "assets/space/horsehead-nebula-hubble-heic0105a.jpg",
+    "assets/space/horsehead-nebula-webb-weic2411a.jpg",
+    "assets/space/hubble-ultra-deep-field-heic0406a.jpg",
+    "assets/space/lagoon-nebula-eso0936a.jpg",
+    "assets/space/lagoon-nebula-wide-field-eso1403c.jpg",
+    "assets/space/lupus-3-dark-cloud-eso1303a.jpg",
+    "assets/space/messier-67-wide-field-eso1402c.jpg",
+    "assets/space/messier-78-reflection-nebula-eso1105a.jpg",
+    "assets/space/milky-way-centre-eso0226a.jpg",
+    "assets/space/milky-way-panorama-eso0932a.jpg",
+    "assets/space/moon-milky-way-arc-potw1217a.jpg",
+    "assets/space/old-stars-youthful-glow-potw1107a.jpg",
+    "assets/space/omega-nebula-eso0925a.jpg",
+    "assets/space/one-million-stars-milky-way-heart-eso0949b.jpg",
+    "assets/space/orion-nebula-hawki-eso1625a.jpg",
+    "assets/space/orion-nebula-vst-eso1723a.jpg",
+    "assets/space/paranal-starscape-eso0934a.jpg",
+    "assets/space/pillars-of-creation-webb-composite.jpg",
+    "assets/space/pillars-of-creation-webb-miri-weic2218a.jpg",
+    "assets/space/pillars-of-creation-webb-nircam-weic2216a.jpg",
+    "assets/space/pipe-nebula-eso-yb.jpg",
+    "assets/space/pipe-nebula-mouthpiece-eso1233a.jpg",
+    "assets/space/rho-ophiuchi-webb-weic2316a.jpg",
+    "assets/space/rosette-nebula-vlt-potw1847a.jpg",
+    "assets/space/secret-of-stellar-youth-potw1104a.jpg",
+    "assets/space/sky-around-alpha-proxima-centauri-eso1629i.jpg",
+    "assets/space/sky-around-ngc-2367-eso1526c.jpg",
+    "assets/space/southern-milky-way-alma-potw1222a.jpg",
+    "assets/space/southern-ring-nebula-webb-weic2207b.jpg",
+    "assets/space/star-cluster-ic-4651-eso1534a.jpg",
+    "assets/space/star-studded-cluster-potw2320a.jpg",
+    "assets/space/tarantula-nebula-webb-weic2212a.jpg",
+    "assets/space/trifid-nebula-visible-eso1504g.jpg",
+    "assets/space/trifid-nebula-vista-eso1504a.jpg",
+    "assets/space/vista-milky-way-centre-gigapixel-eso1242a.jpg",
+    "assets/space/webb-classic-deep-field-potm2507a.jpg"
+  ],
+  "planets": [
+    {
+      "id": "earth",
+      "name": "지구",
+      "src": "assets/planets/earth.webp",
+      "glow": "#8fc4ff"
+    },
+    {
+      "id": "venus",
+      "name": "금성",
+      "src": "assets/planets/venus.webp",
+      "glow": "#f1f0f0"
+    },
+    {
+      "id": "mars",
+      "name": "화성",
+      "src": "assets/planets/mars.webp",
+      "glow": "#f1d6ab"
+    },
+    {
+      "id": "mercury",
+      "name": "수성",
+      "src": "assets/planets/mercury.webp",
+      "glow": "#f1f0ee"
+    },
+    {
+      "id": "jupiter",
+      "name": "목성",
+      "src": "assets/planets/jupiter.webp",
+      "glow": "#f1dbb3"
+    },
+    {
+      "id": "uranus",
+      "name": "천왕성",
+      "src": "assets/planets/uranus.webp",
+      "glow": "#dfecf1"
+    },
+    {
+      "id": "neptune",
+      "name": "해왕성",
+      "src": "assets/planets/neptune.webp",
+      "glow": "#d3e9f1"
+    },
+    {
+      "id": "pluto",
+      "name": "명왕성",
+      "src": "assets/planets/pluto.webp",
+      "glow": "#f1e7d7"
+    },
+    {
+      "id": "trappist-1e",
+      "name": "트라피스트-1 e",
+      "src": "assets/planets/trappist-1e.webp",
+      "glow": "#f1e1c6"
+    },
+    {
+      "id": "trappist-1f",
+      "name": "트라피스트-1 f",
+      "src": "assets/planets/trappist-1f.webp",
+      "glow": "#f1e2c6"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "focus-astro-voyage-time-poc",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "shots": "node scripts/shots.mjs verify http://127.0.0.1:5180/"
+  }
+}

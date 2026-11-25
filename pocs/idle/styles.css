@@ -1,0 +1,338 @@
+/* =========================================================
+   Focus Astro · 우주선 대기 PoC
+   - 목업 셸(data-mode)은 pocs/mockup 과 같다.
+   - 장면 배치는 docs/screens/drafts/v2/01-main-r2.png 를 따른다.
+     우주선은 화면 정중앙에 두고, 행성 지평선을 우주선보다 화면 높이의 약 13% 위에 둔다.
+   ========================================================= */
+
+:root {
+  /* 프레임 원본 851×1848 을 1/2 로 줄인 논리 좌표 */
+  --frame-w: 425.5px;
+  --frame-h: 924px;
+  --screen-x: 18px;
+  --screen-y: 17px;
+  --screen-w: 390px;
+  --screen-h: 891px;
+  --screen-r: 55px;
+  --s: 1;
+
+  --bg: #02030a;
+  --ink: #f4f6fb;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  word-break: keep-all;
+}
+
+body {
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+img { -webkit-user-drag: none; user-select: none; -webkit-touch-callout: none; }
+
+/* ---------------------------------------------------------
+   스테이지 / 디바이스 (pocs/mockup 과 같음)
+   --------------------------------------------------------- */
+
+.stage { position: fixed; inset: 0; }
+.device { position: relative; }
+.frame, .stage-caption { display: none; }
+
+[data-mode="mockup"] .stage {
+  background:
+    radial-gradient(60% 50% at 50% 42%, rgba(70, 110, 190, 0.16), transparent 70%),
+    #07090f;
+}
+
+/* 캡션(40px)을 뺀 영역의 중앙에 절대 배치하고 scale 만 적용한다 */
+[data-mode="mockup"] .device {
+  position: absolute;
+  left: 50%;
+  top: calc(50% - 20px);
+  width: var(--frame-w);
+  height: var(--frame-h);
+  margin: calc(var(--frame-h) / -2) 0 0 calc(var(--frame-w) / -2);
+  transform: scale(var(--s));
+  filter: drop-shadow(0 40px 80px rgba(0, 0, 0, 0.55));
+}
+
+[data-mode="mockup"] .screen {
+  position: absolute;
+  left: var(--screen-x);
+  top: var(--screen-y);
+  width: var(--screen-w);
+  height: var(--screen-h);
+  border-radius: var(--screen-r);
+  overflow: hidden;
+  clip-path: inset(0 round var(--screen-r));
+  --sat: 54px;
+  --sab: 34px;
+  --sal: 0px;
+  --sar: 0px;
+}
+
+[data-mode="mockup"] .frame {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+[data-mode="mockup"] .stage-caption {
+  display: block;
+  position: fixed;
+  left: 0; right: 0; bottom: 18px;
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.62);
+}
+[data-mode="mockup"] .stage-caption span { margin-left: 8px; color: rgba(255, 255, 255, 0.5); }
+
+[data-mode="full"] .device,
+[data-mode="full"] .screen { position: fixed; inset: 0; }
+[data-mode="full"] .screen {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+[data-mode="full"] .sim-statusbar,
+[data-mode="full"] .sim-home { display: none; }
+[data-mode="full"][data-sb] .screen { --sat: 54px; --sab: 34px; }
+[data-mode="full"][data-sb] .sim-statusbar { display: flex; }
+[data-mode="full"][data-sb] .sim-home { display: block; }
+
+/* ---------------------------------------------------------
+   앱
+   --------------------------------------------------------- */
+
+.app {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--bg);
+  user-select: none;
+  -webkit-user-select: none;
+  container-type: size;          /* 장면 크기를 cqw/cqh 로 잡는다 */
+
+  /* 장면 기준값 */
+  --ship-y: 50cqh;               /* 우주선 중심: 정중앙 */
+  /* 행성 지평선(원반 꼭대기). 세로 화면은 34%, 가로 화면에서는 우주선 노즈가 지평선 위로 튀어나오지 않게
+     우주선 윗변(중심 − 폭×0.64)보다 4% 위로 제한한다 */
+  --horizon: min(34cqh, calc(var(--ship-y) - var(--ship-w) * 0.64 - 4cqh));
+  --planet-d: max(250cqw, 120cqh); /* 지평선이 완만하게 휘도록 화면 폭의 2.5배. 가로 화면에서도 하단을 덮는다 */
+  --ship-w: clamp(72px, min(26cqw, 12.5cqh), 150px); /* 시안 비율(폭의 26%). 가로 화면에서는 높이로 제한 */
+  --glow: #8fc4ff;               /* 행성 대기광 (JS가 행성마다 바꾼다) */
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.9s var(--ease-out);
+}
+.app.is-ready .scene { opacity: 1; }
+
+/* 배경: 무작위 우주 사진. 화려한 성운도 장면을 덮지 않도록 어둡게 누른다 */
+.space {
+  position: absolute;
+  inset: -6%;
+  background: var(--space-img, none) center / cover no-repeat;
+  filter: brightness(0.5) saturate(0.82);
+  animation: drift 90s ease-in-out infinite alternate;
+}
+.space-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(2, 3, 10, 0.78) 0%, rgba(2, 3, 10, 0.4) 20%, rgba(2, 3, 10, 0.12) calc(var(--horizon) - 2cqh), transparent var(--horizon)),
+    radial-gradient(120% 70% at 50% 30%, transparent 45%, rgba(2, 3, 10, 0.6) 100%);
+}
+
+/* 행성: 지평선이 --horizon 에 오도록 원반 꼭대기를 맞춘다 */
+.planet {
+  position: absolute;
+  left: 50%;
+  top: var(--horizon);
+  width: var(--planet-d);
+  aspect-ratio: 1;
+  margin-left: calc(var(--planet-d) / -2);
+  border-radius: 50%;
+  /* 대기광: 테두리 가까운 강한 빛 + 넓게 번지는 빛 */
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--glow) 40%, transparent),
+    0 -4px 14px 2px color-mix(in srgb, var(--glow) 50%, transparent),
+    0 -10px 48px 12px color-mix(in srgb, var(--glow) 30%, transparent),
+    0 -20px 140px 44px color-mix(in srgb, var(--glow) 13%, transparent);
+  transform: translateY(2.5cqh);
+  transition: transform 1.4s var(--ease-out), box-shadow 0.6s;
+}
+.app.is-ready .planet { transform: none; }
+.planet img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  filter: brightness(0.82) saturate(0.95);
+}
+/* 테두리 안쪽에 대기광을 한 번 더 얹는다 */
+.planet-shade {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, transparent 96%, color-mix(in srgb, var(--glow) 30%, transparent) 100%);
+}
+/* 지평선 가까이는 밝게 두고 아래로 갈수록 어둡게 눌러 우주선이 돋보이게 한다(시안의 야간 지구 느낌).
+   행성 원반은 화면보다 훨씬 커서 원반 기준 %로는 화면비마다 어두워지는 위치가 달라지므로, 화면(cqh) 기준으로 깐다 */
+.ground-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    transparent var(--horizon),
+    rgba(2, 3, 10, 0.32) calc(var(--horizon) + 7cqh),
+    rgba(2, 3, 10, 0.7) calc(var(--horizon) + 24cqh),
+    rgba(2, 3, 10, 0.88) calc(var(--horizon) + 44cqh),
+    rgba(2, 3, 10, 0.92) 100%);
+}
+
+/* 우주선: 화면 정중앙, 노즈가 위를 향한다.
+   ship-float 가 위아래로 떠다니고(5.6초), ship-sway 가 주기를 달리해 살짝 기울어(8.4초)
+   같은 동작이 반복돼 보이지 않게 한다. */
+.ship {
+  position: absolute;
+  left: 50%;
+  top: var(--ship-y);
+  width: var(--ship-w);
+  translate: -50% -50%;
+}
+.ship-float {
+  position: relative;
+  animation: float 5.6s ease-in-out infinite;
+  will-change: transform;
+}
+.ship-sway {
+  animation: sway 8.4s ease-in-out infinite;
+  transform-origin: 50% 85%;
+}
+.ship img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 18px rgba(255, 196, 120, 0.14));
+}
+/* 대기 중인 엔진의 약한 분사광: 떠오를 때 조금 밝아진다 */
+.ship-flame {
+  position: absolute;
+  left: 50%;
+  top: 97%;
+  width: 56%;
+  aspect-ratio: 2.4;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(220, 255, 255, 0.95), rgba(80, 220, 255, 0.7) 35%, rgba(40, 170, 255, 0.18) 70%, transparent);
+  filter: blur(3px);
+  mix-blend-mode: screen;
+  animation: flame 5.6s ease-in-out infinite;
+}
+/* 분사광 아래로 퍼지는 옅은 빛 */
+.ship-flame::after {
+  content: "";
+  position: absolute;
+  left: -40%;
+  right: -40%;
+  top: 30%;
+  height: 260%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(90, 220, 255, 0.32), transparent);
+  filter: blur(6px);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(7px); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes sway {
+  0%, 100% { transform: rotate(-1.4deg); }
+  50% { transform: rotate(1.4deg); }
+}
+@keyframes flame {
+  0%, 100% { opacity: 0.55; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+@keyframes drift {
+  from { transform: translate3d(1.5%, -1%, 0) scale(1); }
+  to { transform: translate3d(-1.5%, 1%, 0) scale(1.04); }
+}
+
+/* 동작 줄이기: 떠다니기·기울기·배경 흐름·등장 이동을 모두 끄고 정지 장면으로 보여준다 */
+@media (prefers-reduced-motion: reduce) {
+  .ship-float, .ship-sway, .ship-flame, .space { animation: none; }
+  .planet, .place { transition: opacity 0.4s; transform: none; }
+}
+
+/* 현재 위치 (시안의 좌상단 텍스트) */
+.place {
+  position: absolute;
+  top: calc(var(--sat) + 44px);
+  left: max(28px, calc(var(--sal) + 16px));
+  right: max(28px, calc(var(--sar) + 16px));
+  z-index: 2;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.8s 0.2s var(--ease-out), transform 0.8s 0.2s var(--ease-out);
+}
+.app.is-ready .place { opacity: 1; transform: none; }
+.place { cursor: pointer; }
+.greet { margin: 0 0 6px; font-size: 22px; font-weight: 700; letter-spacing: -0.02em; color: rgba(240, 244, 252, 0.6); text-shadow: 0 1px 10px rgba(0, 0, 0, 0.75); }
+.place-name { margin: 0; font-size: 48px; line-height: 1.05; font-weight: 800; letter-spacing: -0.03em; }
+
+/* 가상 상태 표시줄 · 홈 인디케이터 (목업 전용) */
+.sim-statusbar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: var(--sat);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 30px 0 46px;
+  font-size: 16px;
+  font-weight: 600;
+  z-index: 5;
+  pointer-events: none;
+}
+.sb-icons { display: inline-flex; gap: 6px; align-items: center; }
+.sb-icons svg { fill: currentColor; }
+.sim-home {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  width: 134px; height: 5px;
+  margin-left: -67px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.85);
+  z-index: 5;
+  pointer-events: none;
+}

@@ -1,0 +1,12 @@
+{
+  "name": "focus-astro-setup-ui",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "data": "node scripts/build-data.mjs",
+    "dev": "node scripts/serve.mjs",
+    "dev:https": "node scripts/serve.mjs --https",
+    "shots": "node scripts/shots.mjs",
+    "motion": "node scripts/motion-test.mjs"
+  }
+}

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Focus Astro · 설정 UI PoC</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <script>
+    // ?frame=1 목업 · ?frame=0 전체 화면 · ?sb=1 가상 상태 표시줄 · ?debug=1 오프셋/속도 표시
+    (function () {
+      var q = new URLSearchParams(location.search), d = document.documentElement;
+      var p = q.get('frame'), mobile = matchMedia('(hover: none) and (pointer: coarse)').matches;
+      d.dataset.mode = p === '1' ? 'mockup' : p === '0' ? 'full' : mobile ? 'full' : 'mockup';
+      if (q.get('sb') === '1') d.dataset.sb = '1';
+      if (q.get('debug') === '1') d.dataset.debug = '1';
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<main class="stage">
+  <div class="device" id="device">
+    <div class="screen">
+      <div class="app" id="app">
+
+        <div class="sim-sb" aria-hidden="true">
+          <span class="sim-time">8:41</span>
+          <span class="sim-icons">
+            <svg viewBox="0 0 18 12" width="18" height="12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+            <svg viewBox="0 0 16 12" width="16" height="12"><path d="M8 11.6 5.6 9.2a3.4 3.4 0 0 1 4.8 0Zm-4.1-4A5.8 5.8 0 0 1 12.1 7.6l1.6-1.6a8.1 8.1 0 0 0-11.4 0Zm-2.9-3A10 10 0 0 1 15 4.6l1-1A11.4 11.4 0 0 0 0 3.6Z"/></svg>
+            <svg viewBox="0 0 27 13" width="27" height="13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="20" height="9" rx="2.4"/><path d="M25 4.5v4a2 2 0 0 0 0-4Z" opacity=".45"/></svg>
+          </span>
+        </div>
+
+        <!-- 이륙(목적지 설정) -->
+        <section class="v-takeoff" aria-label="목적지 설정">
+          <header class="to-head">
+            <button class="glass-btn round" id="backBtn" type="button" aria-label="뒤로"><svg><use href="#i-back"/></svg></button>
+            <span class="to-spacer"></span>
+            <div class="glass-btn pill">
+              <button type="button" id="shuffleBtn" aria-label="무작위 목적지"><svg><use href="#i-shuffle"/></svg></button>
+              <i class="pill-sep"></i>
+              <button type="button" id="searchBtn" aria-label="검색"><svg><use href="#i-search"/></svg></button>
+            </div>
+          </header>
+
+          <section class="sheet" aria-label="목표 설정">
+            <div class="ruler" id="ruler" role="slider" tabindex="0" aria-label="목적지(집중 시간)">
+              <span class="ruler-mark" aria-hidden="true"></span>
+              <div class="ruler-track" id="rulerTrack"></div>
+            </div>
+            <div class="cards" id="cards" tabindex="0" aria-label="목적지 카드. 좌우로 밀어 둘러보고 눌러서 선택">
+              <div class="cards-track" id="cardsTrack"></div>
+            </div>
+            <button class="cta" id="departBtn" type="button">출항하기</button>
+          </section>
+        </section>
+
+        <pre class="debug" id="debug" aria-hidden="true"></pre>
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+        <div class="sim-home" aria-hidden="true"></div>
+      </div>
+    </div>
+    <img class="frame" src="assets/mockup-iphone.png" alt="" aria-hidden="true" draggable="false" />
+  </div>
+</main>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-rocket" viewBox="0 0 24 24"><path fill="currentColor" d="M20.6 3.4c-3.6-.4-7.2 1-9.7 3.6L9.6 8.4 5.5 8a1 1 0 0 0-.8.3L2.6 10.4a.6.6 0 0 0 .3 1l3.7 1-.5.9 5.6 5.6.9-.5 1 3.7a.6.6 0 0 0 1 .3l2.1-2.1a1 1 0 0 0 .3-.8l-.4-4.1 1.4-1.3c2.6-2.5 4-6.1 3.6-9.7Zm-4.2 6a1.9 1.9 0 1 1-2.7-2.7 1.9 1.9 0 0 1 2.7 2.7ZM6.3 15.6a2.7 2.7 0 0 0-3.4 1.3C2.3 18.2 2 21.9 2 21.9s3.7-.3 5-.9a2.7 2.7 0 0 0 1.3-3.4Z"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 4.5 7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-shuffle" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h3.5c2.2 0 3.6 1.1 4.7 3l1.6 2.8c1.1 1.9 2.5 3.2 4.7 3.2H21M3 17h3.5c1.6 0 2.8-.6 3.7-1.7M14.1 8.7C15 7.6 16.2 7 17.8 7H21M18.5 4.5 21 7l-2.5 2.5M18.5 13.5 21 16l-2.5 2.5"/></g></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></g></symbol>
+  </defs>
+</svg>
+
+<script src="app.js" type="module"></script>
+</body>
+</html>

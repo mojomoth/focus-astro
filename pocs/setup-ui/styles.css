@@ -1,0 +1,157 @@
+/* =========================================================
+   Focus Astro · 설정(이륙) UI PoC
+   기준 393×852 (시안 docs/screens/drafts/v4/02-takeoff.png 1179×2556 @3x)
+   ========================================================= */
+:root {
+  --frame-w: 425.5px; --frame-h: 924px;
+  --screen-x: 18px; --screen-y: 17px; --screen-w: 390px; --screen-h: 891px; --screen-r: 55px;
+  --s: 1;
+  --yellow: #f7c52b; --yellow-ink: #1a1405; --light-ink: #121417;
+  --card-w: 168px; --card-h: 228px; --gap: 10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #000; color: #fff; }
+body {
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased; word-break: keep-all;
+  overflow: hidden; overscroll-behavior: none; -webkit-tap-highlight-color: transparent;
+}
+button { font: inherit; color: inherit; border: 0; background: none; padding: 0; cursor: pointer; }
+img { -webkit-user-drag: none; user-select: none; }
+svg { display: block; }
+
+/* ---------- 스테이지 / 목업 ---------- */
+.stage { position: fixed; inset: 0; display: grid; place-items: center; }
+.device { position: relative; }
+.frame { display: none; }
+[data-mode="mockup"] .stage { background: radial-gradient(60% 50% at 50% 42%, rgba(70, 110, 190, .16), transparent 70%), #07090f; }
+[data-mode="mockup"] .device {
+  position: absolute; left: 50%; top: 50%; width: var(--frame-w); height: var(--frame-h);
+  margin: calc(var(--frame-h) / -2) 0 0 calc(var(--frame-w) / -2);
+  transform: scale(var(--s)); filter: drop-shadow(0 40px 80px rgba(0, 0, 0, .55));
+}
+[data-mode="mockup"] .screen {
+  position: absolute; left: var(--screen-x); top: var(--screen-y); width: var(--screen-w); height: var(--screen-h);
+  border-radius: var(--screen-r); overflow: hidden; clip-path: inset(0 round var(--screen-r));
+}
+[data-mode="mockup"] .frame { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+[data-mode="full"] .stage { display: block; }
+[data-mode="full"] .device, [data-mode="full"] .screen { position: absolute; inset: 0; }
+
+.app { position: absolute; inset: 0; overflow: hidden; background: #000; --sat: env(safe-area-inset-top, 0px); --sab: env(safe-area-inset-bottom, 0px); }
+[data-mode="mockup"] .app, [data-sb="1"] .app { --sat: 54px; --sab: 34px; }
+
+.sim-sb, .sim-home { display: none; }
+[data-mode="mockup"] .sim-sb, [data-sb="1"] .sim-sb {
+  display: flex; position: absolute; z-index: 50; left: 0; right: 0; top: 0; height: 54px;
+  align-items: center; justify-content: space-between; padding: 4px 30px 0 52px; pointer-events: none;
+}
+.sim-time { font-size: 17px; font-weight: 600; letter-spacing: -.2px; }
+.sim-icons { display: flex; gap: 6px; align-items: center; fill: #fff; color: #fff; }
+[data-mode="mockup"] .sim-home, [data-sb="1"] .sim-home {
+  display: block; position: absolute; z-index: 50; left: 50%; bottom: 8px; width: 140px; height: 5px;
+  margin-left: -70px; border-radius: 3px; background: #fff; pointer-events: none;
+}
+
+/* ---------- 공용 ---------- */
+.i-rocket { width: 16px; height: 16px; flex: none; }
+.badge {
+  display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px 0 6px;
+  border-radius: 7px; background: var(--yellow); color: var(--yellow-ink);
+  font-size: 13px; font-weight: 800; letter-spacing: .2px; box-shadow: 0 0 0 1.5px rgba(0, 0, 0, .55);
+}
+.cta {
+  display: block; position: relative; width: 100%; height: 58px; border-radius: 29px;
+  background: linear-gradient(180deg, #f2f6fa 0%, #dfe6ee 100%); color: var(--light-ink);
+  font-size: 19px; font-weight: 700; letter-spacing: -.3px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .35), inset 0 1px 0 #fff; transition: transform .15s ease;
+}
+.cta:active { transform: scale(.98); }
+
+/* ---------- 헤더 ---------- */
+.v-takeoff { position: absolute; inset: 0; }
+.to-head { position: absolute; z-index: 5; left: 18px; right: 16px; top: calc(var(--sat) + 2px); height: 44px; display: flex; align-items: center; }
+.to-spacer { flex: 1; }
+.glass-btn {
+  height: 44px; display: flex; align-items: center; justify-content: center;
+  background: rgba(40, 44, 54, .55); border: 1px solid rgba(255, 255, 255, .18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1); border-radius: 22px;
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+}
+.glass-btn.round { width: 44px; }
+.glass-btn.round svg { width: 20px; height: 20px; }
+.glass-btn.pill { padding: 0 6px; width: 98px; justify-content: space-around; }
+.glass-btn.pill button { width: 40px; height: 40px; display: grid; place-items: center; }
+.glass-btn.pill svg { width: 21px; height: 21px; }
+.pill-sep { width: 1px; height: 20px; background: rgba(255, 255, 255, .18); }
+
+/* ---------- 하단 시트: 눈금자 + 카드 + 버튼 ---------- */
+.sheet { position: absolute; z-index: 4; left: 0; right: 0; bottom: calc(var(--sab) + 22px); height: 382px; }
+
+.ruler { position: relative; height: 72px; overflow: hidden; touch-action: none; cursor: grab; outline: none; user-select: none;
+  -webkit-mask: linear-gradient(90deg, transparent 2%, #000 16%, #000 84%, transparent 98%); mask: linear-gradient(90deg, transparent 2%, #000 16%, #000 84%, transparent 98%); }
+.ruler:active { cursor: grabbing; }
+.ruler-mark { position: absolute; left: 50%; top: 2px; margin-left: -6px; border: 6px solid transparent; border-top: 9px solid #fff; border-bottom: 0; z-index: 2; }
+.ruler-track { position: absolute; left: 50%; top: 16px; height: 50px; will-change: transform; }
+.tick { position: absolute; top: 9px; width: 1.5px; height: 9px; margin-left: -.75px; border-radius: 1px; background: rgba(255, 255, 255, .4); }
+.tick.mid { top: 5px; height: 13px; background: rgba(255, 255, 255, .6); }
+.tick.major { top: 0; height: 18px; width: 2px; background: rgba(255, 255, 255, .9); }
+.tick-label { position: absolute; top: 24px; transform: translateX(-50%); white-space: nowrap; font-size: 14px; font-weight: 600; color: rgba(255, 255, 255, .6); transition: color .2s; }
+.tick-label.is-on { color: #fff; font-weight: 800; }
+
+/* 카드 줄: 네이티브 스크롤 대신 scroller.js가 transform으로 움직인다 */
+.cards { position: relative; height: var(--card-h); margin-top: 8px; overflow: hidden; touch-action: pan-y; user-select: none; outline: none; cursor: grab; }
+.cards:active { cursor: grabbing; }
+.cards-track { position: absolute; left: 50%; top: 0; display: flex; gap: var(--gap); will-change: transform; }
+.card {
+  position: relative; flex: none; width: var(--card-w); height: var(--card-h); border-radius: 20px; padding: 12px 14px 14px;
+  display: flex; flex-direction: column; align-items: stretch; text-align: left;
+  background: linear-gradient(180deg, rgba(52, 58, 70, .9), rgba(30, 34, 42, .9)); border: 1px solid rgba(255, 255, 255, .14);
+  transition: background .3s, color .3s, border-color .3s, box-shadow .3s;
+}
+/* 눌림 하이라이트(영상의 파란 카드): 위에 덮는 층을 페이드한다 */
+.card::after {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none; opacity: 0;
+  background: linear-gradient(180deg, rgba(92, 140, 196, .55), rgba(60, 102, 156, .5));
+  box-shadow: inset 0 0 0 1px rgba(150, 195, 245, .35);
+  transition: opacity .28s ease-out;
+}
+.card > * { position: relative; z-index: 1; } /* 하이라이트 층은 배경과 글자 사이 */
+.card.is-press::after { opacity: 1; transition-duration: .08s; }
+.card.is-sel::after { background: rgba(120, 150, 190, .22); box-shadow: none; }
+
+.c-top { display: flex; align-items: flex-start; justify-content: space-between; }
+.thumb { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; background: #000; box-shadow: 0 0 0 1px rgba(255, 255, 255, .14); }
+.card .badge { height: 20px; font-size: 11.5px; padding: 0 6px 0 5px; border-radius: 6px; }
+.card .badge .i-rocket { width: 11px; height: 11px; }
+.card .nm { margin-top: 12px; font-size: 21px; font-weight: 800; letter-spacing: -.5px; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card .nm.long { font-size: 17px; }
+.card .en { margin-top: 2px; font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, .5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card .note { margin-top: 6px; font-size: 12.5px; font-weight: 500; line-height: 1.35; color: rgba(255, 255, 255, .72); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.c-rows { margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, .12); display: grid; gap: 4px; }
+.row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 13px; }
+.row i { font-style: normal; font-weight: 500; color: rgba(255, 255, 255, .5); flex: none; }
+.row b { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card.is-sel { background: linear-gradient(180deg, #eef3f8, #d4dee9); color: var(--light-ink); border-color: #fff; box-shadow: 0 8px 26px rgba(170, 200, 230, .18); }
+.card.is-sel .en, .card.is-sel .row i { color: rgba(18, 20, 23, .5); }
+.card.is-sel .note { color: rgba(18, 20, 23, .72); }
+.card.is-sel .c-rows { border-top-color: rgba(18, 20, 23, .12); }
+.card.is-sel .thumb { box-shadow: 0 0 0 1px rgba(18, 20, 23, .15); }
+
+.sheet .cta { width: calc(100% - 72px); margin: 19px 36px 0; height: 55px; }
+
+/* ---------- 토스트 / 디버그 ---------- */
+.toast {
+  position: absolute; z-index: 40; left: 50%; top: calc(var(--sat) + 60px); transform: translate(-50%, -12px); opacity: 0;
+  padding: 10px 18px; border-radius: 20px; background: rgba(30, 32, 38, .92); border: 1px solid rgba(255, 255, 255, .15);
+  font-size: 14px; font-weight: 600; white-space: nowrap; pointer-events: none; transition: all .35s cubic-bezier(.22, 1, .36, 1);
+}
+.toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+.debug { display: none; }
+[data-debug="1"] .debug {
+  display: block; position: absolute; z-index: 45; left: 18px; top: calc(var(--sat) + 70px); margin: 0;
+  font: 12px/1.5 ui-monospace, Menlo, monospace; color: #9fe3ff; pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) { .card, .card::after, .tick-label { transition: none; } }

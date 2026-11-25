@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#02030a" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Focus Astro · 우주선 대기 PoC</title>
+  <link rel="apple-touch-icon" href="assets/rocket.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <script>
+    // 첫 페인트 전에 표시 모드를 결정한다. ?frame=1 → 목업, ?frame=0 → 전체 화면
+    (function () {
+      var p = new URLSearchParams(location.search).get('frame');
+      var mobile = matchMedia('(hover: none) and (pointer: coarse)').matches;
+      document.documentElement.dataset.mode = p === '1' ? 'mockup' : p === '0' ? 'full' : mobile ? 'full' : 'mockup';
+      // ?sb=1 → 전체 화면에서도 가상 상태 표시줄을 그린다(시안과 나란히 비교하는 캡처용)
+      if (new URLSearchParams(location.search).get('sb') === '1') document.documentElement.dataset.sb = '1';
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="stage">
+    <div class="device" id="device">
+      <div class="screen" id="screen">
+        <div class="app" id="app">
+          <!-- 장면: 배경(우주) → 행성 → 우주선 순서로 쌓는다 -->
+          <div class="scene" aria-hidden="true">
+            <div class="space" id="space"></div>
+            <div class="space-veil"></div>
+            <div class="planet" id="planet">
+              <img id="planetImg" alt="" draggable="false" />
+              <span class="planet-shade"></span>
+            </div>
+            <div class="ground-shade"></div>
+            <div class="ship">
+              <div class="ship-float">
+                <div class="ship-sway">
+                  <img src="assets/rocket.png" alt="" draggable="false" />
+                </div>
+                <span class="ship-flame"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 현재 위치: 무작위로 고른 행성 이름 -->
+          <header class="place">
+            <p class="greet" id="greet">좋은 저녁입니다!</p>
+            <h1 class="place-name" id="placeName">&nbsp;</h1>
+          </header>
+
+          <!-- 목업 모드 전용 가상 상태 표시줄·홈 인디케이터 -->
+          <div class="sim-statusbar" aria-hidden="true">
+            <span id="sbTime">9:41</span>
+            <span class="sb-icons">
+              <svg viewBox="0 0 18 12" width="18" height="12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+              <svg viewBox="0 0 16 12" width="16" height="12"><circle cx="8" cy="10.3" r="1.5"/><path d="M4.9 7.3a4.4 4.4 0 0 1 6.2 0M2.1 4.5a8.3 8.3 0 0 1 11.8 0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+              <svg viewBox="0 0 27 12" width="27" height="12"><rect x=".5" y=".5" width="23" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="24.6" y="4" width="1.6" height="4" rx=".8" opacity=".4"/></svg>
+            </span>
+          </div>
+          <div class="sim-home" aria-hidden="true"></div>
+        </div>
+      </div>
+      <img class="frame" data-src="assets/mockup-iphone.png" alt="" aria-hidden="true" draggable="false" />
+    </div>
+    <p class="stage-caption">Focus Astro · 우주선 대기 PoC <span>R 키 또는 행성 이름 탭: 배경·행성 다시 뽑기</span></p>
+  </main>
+  <script src="app.js" type="module"></script>
+</body>
+</html>

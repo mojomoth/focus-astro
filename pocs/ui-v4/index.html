@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Focus Astro · UI v4</title>
+  <link rel="icon" href="assets/gen/rocket-front.png" />
+  <link rel="apple-touch-icon" href="assets/gen/rocket-front.png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <script>
+    // ?frame=1 → 목업, ?frame=0 → 전체 화면. ?sb=1 → 전체 화면에서도 가상 상태 표시줄
+    (function () {
+      var q = new URLSearchParams(location.search), d = document.documentElement;
+      var p = q.get('frame'), mobile = matchMedia('(hover: none) and (pointer: coarse)').matches;
+      d.dataset.mode = p === '1' ? 'mockup' : p === '0' ? 'full' : mobile ? 'full' : 'mockup';
+      if (q.get('sb') === '1') d.dataset.sb = '1';
+      if (q.get('still') === '1') d.dataset.still = '1';
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<main class="stage">
+  <div class="device" id="device">
+    <div class="screen" id="screen">
+      <div class="app" id="app" data-view="main">
+
+        <!-- 가상 상태 표시줄 (목업 / ?sb=1) -->
+        <div class="sim-sb" aria-hidden="true">
+          <span class="sim-time">8:41</span>
+          <span class="sim-icons">
+            <svg viewBox="0 0 18 12" width="18" height="12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+            <svg viewBox="0 0 16 12" width="16" height="12"><path d="M8 11.6 5.6 9.2a3.4 3.4 0 0 1 4.8 0Zm-4.1-4A5.8 5.8 0 0 1 12.1 7.6l1.6-1.6a8.1 8.1 0 0 0-11.4 0Zm-2.9-3A10 10 0 0 1 15 4.6l1-1A11.4 11.4 0 0 0 0 3.6Z"/></svg>
+            <svg viewBox="0 0 27 13" width="27" height="13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="20" height="9" rx="2.4"/><path d="M25 4.5v4a2 2 0 0 0 0-4Z" opacity=".45"/></svg>
+          </span>
+        </div>
+
+        <!-- ============ 메인 (첫 화면) ============ -->
+        <section class="view v-main is-active" data-view="main" aria-label="메인">
+          <h1 class="brand">FOCUS ASTRO</h1>
+          <header class="main-head">
+            <p class="place" id="place">지구</p>
+          </header>
+          <span class="chip chip-today"><svg class="i-rocket"><use href="#i-rocket"/></svg><span id="todayText">오늘 집중 0분</span></span>
+
+
+          <nav class="dock">
+            <div class="tabs" role="tablist">
+              <button class="tab is-active" role="tab" aria-selected="true" aria-label="관제탑"><svg><use href="#i-tower"/></svg></button>
+              <button class="tab" role="tab" aria-selected="false" aria-label="항로"><svg><use href="#i-globe"/></svg></button>
+              <button class="tab" role="tab" aria-selected="false" aria-label="탑승권"><svg><use href="#i-ticket"/></svg></button>
+            </div>
+            <button class="fab" id="toTakeoff" type="button">
+              <svg><use href="#i-launch"/></svg>
+              <span>이륙</span>
+            </button>
+          </nav>
+        </section>
+
+        <!-- ============ 이륙 (목적지 설정) ============ -->
+        <section class="view v-takeoff" data-view="takeoff" aria-label="이륙">
+
+          <header class="to-head">
+            <button class="glass-btn round" id="backBtn" type="button" aria-label="뒤로"><svg><use href="#i-back"/></svg></button>
+            <span class="to-spacer"></span>
+            <div class="glass-btn pill">
+              <button type="button" id="shuffleBtn" aria-label="무작위 목적지"><svg><use href="#i-shuffle"/></svg></button>
+              <i class="pill-sep"></i>
+              <button type="button" aria-label="검색"><svg><use href="#i-search"/></svg></button>
+            </div>
+          </header>
+
+          <section class="sheet" aria-label="목표 설정">
+            <div class="ruler" id="ruler" role="slider" tabindex="0" aria-label="목표 거리(집중 시간)" aria-valuemin="30" aria-valuemax="360">
+              <span class="ruler-mark" aria-hidden="true"></span>
+              <div class="ruler-track" id="rulerTrack"></div>
+            </div>
+            <div class="cards" id="cards">
+              <div class="cards-track" id="cardsTrack"></div>
+            </div>
+            <button class="cta" id="departBtn" type="button">출항하기</button>
+          </section>
+        </section>
+
+        <!-- ============ 출항 (집중 / 휴식) ============ -->
+        <section class="view v-flight" data-view="flight" data-phase="focus" aria-label="출항">
+
+          <span class="chip chip-flight" id="flightChip"><svg class="i-rocket"><use href="#i-rocket"/></svg><span id="aheadText">앞선 우주선 128척</span></span>
+
+          <header class="fl-head">
+            <p class="fl-kicker" id="flKicker">화성까지 항해 중</p>
+            <p class="fl-timer" id="flTimer">24:13</p>
+            <p class="fl-sub" id="flSub">집중 1/2 세트 · 30분 집중</p>
+          </header>
+
+          <div class="fleet" id="fleet" aria-hidden="true">
+            <div class="mate mate-a"><span class="mate-tag" id="mateA">SoyA · 0.07 AU</span></div>
+            <div class="mate mate-b"><span class="mate-tag" id="mateB">Min · 0.04 AU</span></div>
+          </div>
+
+
+          <section class="route-card" aria-label="항로 진행">
+            <div class="rc-row">
+              <span class="rc-end"><b class="badge"><svg class="i-rocket"><use href="#i-rocket"/></svg>EAR</b><span>지구</span></span>
+              <span class="rc-end rc-to"><span id="rcToName">화성</span><b class="badge"><svg class="i-rocket"><use href="#i-rocket"/></svg><span id="rcToCode">MRS</span></b></span>
+            </div>
+            <div class="rc-track"><i class="rc-fill" id="rcFill"></i><span class="rc-ship" id="rcShip"><svg class="i-go"><use href="#i-mini-ship"/></svg><svg class="i-pause"><use href="#i-pause"/></svg></span></div>
+            <p class="rc-dist" id="rcDist"><b>0.05 AU</b> / 0.52 AU</p>
+          </section>
+
+          <footer class="fl-foot fl-foot-focus">
+            <p class="warn">앱을 벗어나면 항해가 실패합니다</p>
+            <button class="stop" id="stopBtn" type="button" aria-label="항해 중단"><i></i></button>
+          </footer>
+          <footer class="fl-foot fl-foot-rest">
+            <button class="cta" id="skipRestBtn" type="button">휴식 건너뛰기</button>
+          </footer>
+
+          <div class="confirm" id="confirm" hidden>
+            <div class="confirm-box" role="alertdialog" aria-labelledby="cfTitle">
+              <p class="cf-title" id="cfTitle">항해를 중단할까요?</p>
+              <p class="cf-body">지금 멈추면 이번 항해는 실패로 기록됩니다.</p>
+              <div class="cf-actions"><button type="button" id="cfKeep">계속 항해</button><button type="button" id="cfStop" class="danger">중단</button></div>
+            </div>
+          </div>
+        </section>
+
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+        <div class="sim-home" aria-hidden="true"></div>
+      </div>
+    </div>
+    <img class="frame" src="assets/mockup-iphone.png" alt="" aria-hidden="true" draggable="false" />
+  </div>
+</main>
+
+<!-- 아이콘 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-rocket" viewBox="0 0 24 24"><path fill="currentColor" d="M20.6 3.4c-3.6-.4-7.2 1-9.7 3.6L9.6 8.4 5.5 8a1 1 0 0 0-.8.3L2.6 10.4a.6.6 0 0 0 .3 1l3.7 1-.5.9 5.6 5.6.9-.5 1 3.7a.6.6 0 0 0 1 .3l2.1-2.1a1 1 0 0 0 .3-.8l-.4-4.1 1.4-1.3c2.6-2.5 4-6.1 3.6-9.7Zm-4.2 6a1.9 1.9 0 1 1-2.7-2.7 1.9 1.9 0 0 1 2.7 2.7ZM6.3 15.6a2.7 2.7 0 0 0-3.4 1.3C2.3 18.2 2 21.9 2 21.9s3.7-.3 5-.9a2.7 2.7 0 0 0 1.3-3.4Z"/></symbol>
+    <symbol id="i-tower" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><path d="M4.5 4.5h15l-2 4.5h-11Z"/><path d="M8 9v12M16 9v12M5.5 21h13M8 15h8M12 2.5v2"/></g></symbol>
+    <symbol id="i-orbit" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="5.2"/><path d="M5.3 16.8C3 18.7 2.2 20.3 2.9 21c1.3 1.3 6.6-1.8 11.7-6.8S22.4 3.8 21 2.6c-.6-.6-2.2.1-4.1 1.9"/></g></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.2"/><path d="M3.8 12h16.4M12 3.8c2.3 2.4 3.4 5.1 3.4 8.2s-1.1 5.8-3.4 8.2M12 3.8C9.7 6.2 8.6 8.9 8.6 12s1.1 5.8 3.4 8.2"/><path d="M15.5 7.5 21 5.2l-1.6 3.1" /></g></symbol>
+    <symbol id="i-ticket" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/></g></symbol>
+    <symbol id="i-launch" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M14.2 4.2c2.6-1.3 5.6-1.5 5.6-1.5s-.2 3-1.5 5.6c-1 2-3 4-5.4 5.6L9.6 10.6c1.6-2.4 3.6-4.4 4.6-6.4Z"/><path d="M9.6 10.6 6 10.2 3.6 12.6l3.6 1.2M13.4 14.4l.4 3.6-2.4 2.4-1.2-3.6M6.6 16.4c-1.4.4-2.5 2-2.7 3.9 1.9-.2 3.5-1.3 3.9-2.7"/><circle cx="15.4" cy="8.6" r="1.4"/></g></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 4.5 7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-shuffle" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h3.5c2.2 0 3.6 1.1 4.7 3l1.6 2.8c1.1 1.9 2.5 3.2 4.7 3.2H21M3 17h3.5c1.6 0 2.8-.6 3.7-1.7M14.1 8.7C15 7.6 16.2 7 17.8 7H21M18.5 4.5 21 7l-2.5 2.5M18.5 13.5 21 16l-2.5 2.5"/></g></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></g></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path fill="currentColor" d="M20.2 14.6A8.6 8.6 0 0 1 9.4 3.8a8.6 8.6 0 1 0 10.8 10.8Z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><g fill="currentColor"><rect x="7" y="5" width="3.4" height="14" rx="1.2"/><rect x="13.6" y="5" width="3.4" height="14" rx="1.2"/></g></symbol>
+    <symbol id="i-mini-ship" viewBox="0 0 40 20"><path fill="currentColor" d="M2 8.6h4.2L3.4 3.2h4.4l4.6 4.1C14.6 4 19.4 3 24 3.2c6 .3 11.2 3.3 14.4 6.8-3.2 3.5-8.4 6.5-14.4 6.8-4.6.2-9.4-.8-11.6-4.1l-4.6 4.1H3.4l2.8-5.4H2a1.4 1.4 0 0 1 0-2.8Z"/><circle cx="27.5" cy="10" r="2.6" fill="#0b1522"/></symbol>
+  </defs>
+</svg>
+
+<script src="app.js" type="module"></script>
+</body>
+</html>
