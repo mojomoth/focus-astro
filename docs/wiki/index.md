@@ -2,6 +2,8 @@
 
 ## 실행
 
+[Focus Astro 배포본](https://focus-astro.vercel.app/)
+
 Node.js 24에서 `npm ci`를 한 뒤 `npm run dev`로 실행합니다. 루트 주소에서 앱을 열고, `/pocs/ui`에서 같은 UI를 확인할 수 있습니다. 데스크톱은 아이폰 프레임, 모바일은 안전 영역을 적용한 전체 화면을 사용합니다.
 
 기존 PoC는 개발 서버의 `/pocs/idle`, `/pocs/ui-v4`, `/pocs/setup-ui`, `/pocs/voyage`, `/pocs/voyage-time`, `/pocs/mockup`, `/pocs/clone`에서 확인합니다. 밸런스 저장은 [항해 시간 PoC](../../pocs/voyage-time/README.md)의 단독 서버에서 실행합니다.
